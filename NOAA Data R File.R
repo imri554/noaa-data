@@ -24,7 +24,7 @@ mat <- import("/Users/imrihaggin1/Desktop/NOAA data/Historic_distance_shore-1978
 
 x = "Alewive"
 
-pdfPath = "~/Desktop/NOAA data/ratioPlots.pdf"
+pdfPath = "~/Desktop/NOAA data/tonPlots.pdf"
 pdf(file = pdfPath)
 par(mfrow = c(1, 1))
 
@@ -32,31 +32,90 @@ par(mfrow = c(1, 1))
 
 #fed:reg line graph over years
 
+#matplot for the weights and stuff
+
+#tons
+
+for (x in unique(df$FUS_NAME)) {
+  
+  filtered <- df %>%
+    filter(FUS_NAME == x)
+
+  filtered <- select(filtered, "YEAR", "3-200 TONS", "0-3 TONS")
+  
+  #filtered_removed_outliers <- filtered$`Ratio 3 - 200 Tons : 0 - 3 Tons`[!filtered$`Ratio 3 - 200 Tons : 0 - 3 Tons` %in% boxplot.stats(filtered$`Ratio 3 - 200 Tons : 0 - 3 Tons`)$out]
+  #print(boxplot.stats(filtered$`Ratio 3 - 200 Tons : 0 - 3 Tons`)$out)
+  
+  #df_melt <- tidyr::gather(filtered, variable, value, "0-3 TONS", "3-200 TONS")
+  
+  #filter df for outliers
+  #melt_values_removed_outliers <- df_melt[!df_melt %in% boxplot.stats(df_melt$value)$out]
+  
+  #plot(df_melt, type = "l", main = paste("Ratio (Federal : Regional) Tons of Catch for", x), xlab = "Year", ylab = "Federal : Regional Ratio (Tons)")
+  #plot(filteredTS)
+  
+  
+  #matplot is for wide format
+  matplot(filtered$YEAR, select(filtered, "3-200 TONS", "0-3 TONS"), type = c("l"), lty = 1, lwd = 2, lend = par("lend"), pch=NULL ,col = 1:2, xlab = "Year", ylab = "Tons of Catch", main = paste("Tons of Catch for", x, "(Federal vs Regional)") )
+  legend("topleft", c("3-200 TONS (Federal)", "0-3 TONS (Regional)"), col = 1:2, lty = 1, lwd = 2)
+  
+  
+  #plot is for long format
+  #plot(melt_values_removed_outliers$YEAR, melt_values_removed_outliers$value, type = 'l', main = paste("Tons of Catch for", x, "Federal vs Regional"), xlab = "Year", ylab = "tons", col = "#001AFD")
+ 
+}
+
+#Dollars
+pdfPath = "~/Desktop/NOAA data/dollarPlots.pdf"
+pdf(file = pdfPath)
+par(mfrow = c(1, 1))
 for (x in unique(df$FUS_NAME)) {
   
   filtered <- df %>%
     filter(FUS_NAME == x)
   
-  filtered <- select(filtered, "YEAR", "0-3 TONS", "3-200 TONS")
+  filtered <- select(filtered, "YEAR", "3-200 DOLLARS", "0-3 DOLLARS")
   
-  #filtered_removed_outliers <- filtered$`Ratio 3 - 200 Tons : 0 - 3 Tons`[!filtered$`Ratio 3 - 200 Tons : 0 - 3 Tons` %in% boxplot.stats(filtered$`Ratio 3 - 200 Tons : 0 - 3 Tons`)$out]
-  #print(boxplot.stats(filtered$`Ratio 3 - 200 Tons : 0 - 3 Tons`)$out)
   
-  df_melt <- tidyr::gather(filtered, variable, value, "0-3 TONS", "3-200 TONS")
+  matplot(filtered$YEAR, select(filtered, "3-200 DOLLARS", "0-3 DOLLARS"), type = c("l"), lty = 1, lwd = 2, lend = par("lend"), pch=NULL ,col = 1:2, xlab = "Year", ylab = "Dollars of Catch (Thousands)", main = paste("Dollars of Catch for", x, "(Federal vs Regional)") )
+  legend("topleft", c("3-200 DOLLARS (Federal)", "0-3 DOLLARS (Regional)"), col = 1:2, lty = 1, lwd = 2)
   
-  #filter df for outliers
-  melt_values_removed_outliers <- df_melt[!df_melt %in% boxplot.stats(df_melt$value)$out]
   
-  #plot(df_melt, type = "l", main = paste("Ratio (Federal : Regional) Tons of Catch for", x), xlab = "Year", ylab = "Federal : Regional Ratio (Tons)")
   
-  #matplot is for wide format
-  matplot(filtered$YEAR, filtered, type = c("l"),pch=1,col = 1:4)
-  legend("topleft", colnames(filtered)) # optional legend
-  
-  #plot is for long format
-  plot(melt_values_removed_outliers$YEAR, melt_values_removed_outliers$value, type = 'l', main = paste("Tons of Catch for", x, "Federal vs Regional"), xlab = "Year", ylab = "tons", col = "#001AFD")
- 
 }
+pdfPath = "~/Desktop/NOAA data/poundsPlots.pdf"
+pdf(file = pdfPath)
+par(mfrow = c(1, 1))
+for (x in unique(df$FUS_NAME)) {
+  
+  filtered <- df %>%
+    filter(FUS_NAME == x)
+  
+  filtered <- select(filtered, "YEAR", "3-200 POUNDS", "0-3 POUNDS")
+  
+  
+  matplot(filtered$YEAR, select(filtered, "3-200 POUNDS", "0-3 POUNDS"), type = c("l"), lty = 1, lwd = 2, lend = par("lend"), pch=NULL ,col = 1:2, xlab = "Year", ylab = "Pounds of Catch (Thousands)", main = paste("Pounds of Catch for", x, "(Federal vs Regional)") )
+  legend("topleft", c("3-200 Pounds (Federal)", "0-3 Pounds (Regional)"), col = 1:2, lty = 1, lwd = 2)
+  
+  
+  
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
  
 for (x in unique(df$FUS_NAME)) {
  
@@ -187,3 +246,4 @@ dev.off()  # But only if there IS a plot
 cat("\014")  # ctrl+L
 
 # Clear mind :)
+
